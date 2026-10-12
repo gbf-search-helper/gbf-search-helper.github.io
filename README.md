@@ -7,9 +7,9 @@
 
 ## 이용하기
 
-- [웹사이트 바로가기](https://ww9999w.github.io/gbf-search-builder/)
-- [Chrome 확장프로그램 다운로드 및 설치 안내](https://ww9999w.github.io/gbf-search-builder/download.html)
-- [최신 릴리스](https://github.com/ww9999w/gbf-search-builder/releases/latest)
+- [웹사이트 바로가기](https://gbf-search-helper.github.io/)
+- [Chrome 확장프로그램 다운로드 및 설치 안내](https://gbf-search-helper.github.io/download.html)
+- [최신 릴리스](https://github.com/gbf-search-helper/gbf-search-helper.github.io/releases/latest)
 
 ## Chrome 확장프로그램 설치
 
