@@ -1,5 +1,5 @@
-import { groups, buildQuery, searchLinks } from './query.mjs?v=0.3.6';
-import { categories as defaultCategories, bosses as defaultBosses } from './catalog.mjs?v=0.3.6';
+import { groups, buildQuery, searchLinks } from './query.mjs?v=0.3.7';
+import { categories as defaultCategories, bosses as defaultBosses } from './catalog.mjs?v=0.3.7';
 const categories=defaultCategories;
 const bosses=defaultBosses;
 const STATE_KEY='gbf-search-web-state-v1';
