@@ -22,4 +22,18 @@ body{height:580px;overflow:hidden}.app{height:580px;display:grid;grid-template-r
 
 .actions a span{min-width:30px;text-align:center}.actions a.link-copied{border-color:#d19a26;box-shadow:inset 0 0 0 1px #e8c36d}
 
-footer a{color:var(--sky);text-decoration:none} body{margin:12px auto;}
+/* Keep query and meaning together; feedback floats without shifting the popup. */
+.app{grid-template-rows:minmax(0,1fr) 160px 16px}
+output{height:auto;min-height:0;flex-shrink:0;padding:4px 0 2px;max-height:42px}
+.summary{height:auto;min-height:0;flex-shrink:0;max-height:28px;margin:0 0 9px}
+.actions a{gap:4px}.actions a span{min-width:0}
+.actions button,.actions a{position:relative}
+.actions .is-copied::after{content:'✓ 복사됨';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#edf8f4;color:#28725b;border:1px solid #aad3c2;border-radius:4px;animation:copy-confirm .18s ease-out;pointer-events:none}
+#status{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:9px;width:max-content;max-width:calc(100% - 32px);height:auto;min-height:0;margin:0;padding:10px 14px;border:1px solid #c7dce6;border-radius:10px;background:#fff;color:#23475e;font-size:12px;line-height:1.4;box-shadow:0 8px 24px #23475e20;animation:clipboard-notice .22s ease-out;pointer-events:none}
+#status:empty{display:none}#status svg{width:20px;height:20px;flex:0 0 20px;fill:none;stroke:#347da7;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.clipboard-check{stroke:#28725b;stroke-dasharray:14;animation:clipboard-check .35s ease-out}
+@keyframes clipboard-notice{from{opacity:0;transform:translate(-50%,6px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes copy-confirm{from{opacity:0}to{opacity:1}}
+@keyframes clipboard-check{from{stroke-dashoffset:14}to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){#status,.clipboard-check,.actions .is-copied::after{animation:none}}
+
+footer a{color:var(--sky);text-decoration:none} body{margin:12px auto;zoom:1.3;height:504px} .app{height:504px;grid-template-rows:296px 160px 16px}

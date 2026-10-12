@@ -1,5 +1,5 @@
-import { groups, buildQuery, searchLinks } from './query.mjs?v=0.3.5';
-import { categories as defaultCategories, bosses as defaultBosses } from './catalog.mjs?v=0.3.5';
+import { groups, buildQuery, searchLinks } from './query.mjs?v=0.3.6';
+import { categories as defaultCategories, bosses as defaultBosses } from './catalog.mjs?v=0.3.6';
 const categories=defaultCategories;
 const bosses=defaultBosses;
 const STATE_KEY='gbf-search-web-state-v1';
@@ -129,15 +129,32 @@ function update(){
   for(const code of ['ja','en']){$('language-'+code).setAttribute('aria-pressed',String(language===code&&valid));$('language-'+code).disabled=!result.available[code];}
   $('copy').disabled=!result.available.ja;$('copy-en').disabled=!result.available.en;
   const links=searchLinks(query);for(const name of ['youtube','google','x']){$(name).href=links[name];$(name).setAttribute('aria-disabled',String(!valid));$(name).tabIndex=valid?0:-1;}
-  $('status').textContent=valid?'선택한 버튼을 다시 누르면 해당 조건이 해제됩니다.':'지원 언어가 다른 커스텀 조건을 해제하세요.';save();
+  $('status').replaceChildren();if(!valid)$('status').textContent='지원 언어가 다른 커스텀 조건을 해제하세요.';save();
 }
 $('prefix').addEventListener('change',update);
 $('reset').addEventListener('click',()=>{selection=boss?.element?{element:boss.element}:{};$('prefix').checked=true;renderOptions();update();$('status').textContent='검색 조건을 초기화했습니다.';});
 for(const code of ['ja','en'])$('language-'+code).addEventListener('click',()=>{language=code;update();});
+const feedbackTimers=new Map();
+let noticeTimer;
+function showCopyFeedback(button,message){
+  clearTimeout(feedbackTimers.get(button));
+  button.classList.add('is-copied');
+  feedbackTimers.set(button,setTimeout(()=>{button.classList.remove('is-copied');feedbackTimers.delete(button);},1800));
+  clearTimeout(noticeTimer);
+  const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('aria-hidden','true');
+  const outline=document.createElementNS(icon.namespaceURI,'path');
+  outline.setAttribute('d','M9 5H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3M9 3h6v4H9z');
+  const check=document.createElementNS(icon.namespaceURI,'path');check.setAttribute('d','m8 14 3 3 5-6');check.classList.add('clipboard-check');
+  icon.append(outline,check);
+  const text=document.createElement('span');text.textContent=message;
+  $('status').replaceChildren(icon,text);
+  noticeTimer=setTimeout(()=>$('status').replaceChildren(),2200);
+}
 async function copyQuery(code){
   if(!currentResult.available[code])return;
   const query=code==='en'?currentResult.englishQuery:currentResult.query;
-  try{await navigator.clipboard.writeText(query);$('status').textContent=(code==='en'?'영문':'일본어')+' 검색어를 복사했습니다.';}
+  try{await navigator.clipboard.writeText(query);showCopyFeedback($(code==='en'?'copy-en':'copy'),(code==='en'?'영문':'일본어')+' 검색어 복사 완료');}
   catch{language=code;update();const range=document.createRange();range.selectNodeContents($('query'));const selected=window.getSelection();selected.removeAllRanges();selected.addRange(range);$('status').textContent='검색어가 선택되었습니다. Ctrl+C로 복사하세요.';}
 }
 $('copy').addEventListener('click',()=>copyQuery('ja'));
